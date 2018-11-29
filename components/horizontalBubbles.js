@@ -1,7 +1,6 @@
 import { ResponsiveBubble } from '@nivo/circle-packing'
 
 const Bubble = (props) => {
-  console.log('bubble');
   return (
     <ResponsiveBubble
       root={{

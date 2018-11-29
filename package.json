@@ -1,4 +1,5 @@
 {
+  "homepage": "http://ambreelmee.github.io/hello-next",
   "name": "hello-next",
   "version": "1.0.0",
   "description": "",
@@ -7,7 +8,9 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "next start -p 8000",
-    "export": "next export"
+    "export": "next export",
+    "predeploy": "next export",
+    "deploy": "gh-pages -d out"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +27,8 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-markdown": "^4.0.3"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }
