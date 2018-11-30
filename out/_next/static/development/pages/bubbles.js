@@ -1,4 +1,4 @@
-((window["webpackJsonp"] = window["webpackJsonp"] || []).push([["static/development/pages/treemap.js"],{
+((window["webpackJsonp"] = window["webpackJsonp"] || []).push([["static/development/pages/bubbles.js"],{
 
 /***/ "./components/Header.js":
 /*!******************************!*\
@@ -88,10 +88,10 @@ var Layout = function Layout(props) {
 
 /***/ }),
 
-/***/ "./components/TreeMap.js":
-/*!*******************************!*\
-  !*** ./components/TreeMap.js ***!
-  \*******************************/
+/***/ "./components/ecosystemeBubble.js":
+/*!****************************************!*\
+  !*** ./components/ecosystemeBubble.js ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -99,88 +99,227 @@ var Layout = function Layout(props) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _nivo_treemap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nivo/treemap */ "./node_modules/@nivo/treemap/index.js");
-/* harmony import */ var _nivo_treemap__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nivo_treemap__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nivo/circle-packing */ "./node_modules/@nivo/circle-packing/index.js");
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__);
 
+ // make sure parent container have a defined height when using responsive component,
+// otherwise height will be 0 and no chart will be rendered.
+// website examples showcase many properties, you'll often use just a few of them.
 
+var childrenGenerator = function childrenGenerator(number, color) {
+  var children = [];
 
+  for (var i = 0; i < number; i++) {
+    children.push({
+      "name": i.toString(),
+      "loc": i,
+      "color": i % 3 === 0 ? '#fc9550' : color // no logic here is just to have different color in same child
+
+    });
+  }
+
+  return children;
+};
+
+var children1 = childrenGenerator(32, 'blue');
+var children2 = childrenGenerator(8, '#ffd100');
+var mainChildren = childrenGenerator(1200);
+mainChildren[0].children = childrenGenerator(12);
 var data = {
-  "name": "nivo",
+  "name": "main",
   "children": [{
-    "name": "PME",
-    "loc": 540,
-    "color": "#f64a4a"
+    "name": "children1",
+    "children": children1,
+    "colors": "blue"
   }, {
-    "name": "Institution sans but lucratif",
-    "loc": 168,
-    "color": "#942963"
-  }, {
-    "name": "Entreprise de taille intermédiaire",
-    "loc": 134,
-    "color": "#f64a4a"
-  }, {
-    "name": "Enseignement supérieur",
-    "loc": 128,
-    "color": "#f68d4a"
-  }, {
-    "name": "Grande entreprise",
-    "loc": 102,
-    "color": "#f64a4a"
-  }, {
-    "name": "Centre hospitalier",
-    "loc": 80,
-    "color": "#f68d4a"
-  }, {
-    "name": "Autres",
-    "loc": 75,
-    "color": "#ffd100"
-  }, {
-    "name": "Entreprise privée",
-    "loc": 70,
-    "color": "#f64a4a"
-  }, {
-    "name": "Entreprise",
-    "loc": 40,
-    "color": "#f64a4a"
-  }, {
-    "name": "EPIC",
-    "loc": 20,
-    "color": "#ffd100"
+    "name": "children2",
+    "children": children2,
+    "color": "yellow"
   }]
 };
 
-var TreeMap = function TreeMap() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_nivo_treemap__WEBPACK_IMPORTED_MODULE_2__["ResponsiveTreeMap"], {
+var largeBubbles = function largeBubbles() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__["ResponsiveBubble"], {
     root: data,
+    margin: {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
     identity: "name",
     value: "loc",
-    leavesOnly: true,
-    innerPadding: 3,
-    outerPadding: 3,
-    margin: {
-      "top": 10,
-      "right": 10,
-      "bottom": 10,
-      "left": 10
-    },
-    label: "loc",
-    labelFormat: ".0s",
-    labelSkipSize: 12,
-    labelTextColor: "inherit:darker(1.2)",
-    colors: "nivo",
     colorBy: function colorBy(node) {
       return node.color;
     },
-    borderColor: "inherit:darker(0.3)",
+    enableLabel: false,
+    isInteractive: true,
+    isZoomable: false,
+    padding: 15,
+    leavesOnly: true,
+    labelTextColor: "inherit:darker(0.8)",
+    borderWidth: 2,
     animate: true,
     motionStiffness: 90,
-    motionDamping: 11
+    motionDamping: 12
   });
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (TreeMap);
+/* harmony default export */ __webpack_exports__["default"] = (largeBubbles);
+
+/***/ }),
+
+/***/ "./components/prodLargeBubbles.js":
+/*!****************************************!*\
+  !*** ./components/prodLargeBubbles.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nivo/circle-packing */ "./node_modules/@nivo/circle-packing/index.js");
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var data = {
+  "name": "main",
+  "children": [{
+    "name": "Publications",
+    "loc": 423,
+    "color": "#942963"
+  }, {
+    "name": "Projets",
+    "loc": 398,
+    "color": "#30c378"
+  }, {
+    "name": "Brevets",
+    "loc": 177,
+    "color": "#f64a4a"
+  }, {
+    "name": "Thèses",
+    "loc": 83,
+    "color": "#f68d4a"
+  }]
+};
+
+var largeBubbles = function largeBubbles() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__["ResponsiveBubble"], {
+    root: data,
+    margin: {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
+    identity: "name",
+    value: "loc",
+    colorBy: function colorBy(node) {
+      return node.color;
+    },
+    enableLabel: true,
+    isInteractive: true,
+    isZoomable: false,
+    padding: 15,
+    leavesOnly: true,
+    label: function label(node) {
+      return "".concat(node.id, ": ").concat(node.value);
+    },
+    labelTextColor: "inherit:darker(1)",
+    borderWidth: 2,
+    animate: true,
+    motionStiffness: 90,
+    motionDamping: 12
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (largeBubbles);
+
+/***/ }),
+
+/***/ "./components/prodSmallBubbles.js":
+/*!****************************************!*\
+  !*** ./components/prodSmallBubbles.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nivo/circle-packing */ "./node_modules/@nivo/circle-packing/index.js");
+/* harmony import */ var _nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__);
+
+ // generate small bubbles
+
+var childrenGenerator = function childrenGenerator(number, color) {
+  var children = [];
+
+  for (var i = 0; i < number; i++) {
+    children.push({
+      "name": i.toString(),
+      "color": color,
+      "loc": 1
+    });
+  }
+
+  return children;
+}; // big bubble
+
+
+var mainChildren1 = childrenGenerator(1256, "blue");
+mainChildren1[0].children = childrenGenerator(12, "white"); // use to have a white circle inside
+
+var mainChildren2 = childrenGenerator(178, "#fc9550");
+mainChildren2[0].children = childrenGenerator(1, "white");
+var mainChildren3 = childrenGenerator(1251, "#f96d85");
+mainChildren3[0].children = childrenGenerator(12, "white");
+var data = {
+  "children": [{
+    "name": "Bubble1",
+    "children": mainChildren1
+  }, {
+    "name": "Bubble2",
+    "children": mainChildren2
+  }, {
+    "name": "Bubble3",
+    "children": mainChildren3
+  }]
+};
+
+var prodSmallBubbles = function prodSmallBubbles() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_nivo_circle_packing__WEBPACK_IMPORTED_MODULE_1__["ResponsiveBubble"], {
+    root: data,
+    margin: {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
+    identity: "name",
+    value: "loc",
+    colors: "nivo" // overriden by colorBy
+    ,
+    colorBy: function colorBy(node) {
+      return node.color;
+    },
+    enableLabel: true,
+    isInteractive: true,
+    isZoomable: false,
+    padding: 6,
+    leavesOnly: true,
+    labelTextColor: "inherit:darker(0.8)",
+    borderWidth: 2,
+    animate: true,
+    motionStiffness: 90,
+    motionDamping: 12
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (prodSmallBubbles);
 
 /***/ }),
 
@@ -872,6 +1011,976 @@ module.exports = _typeof;
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime-module.js");
+
+
+/***/ }),
+
+/***/ "./node_modules/@nivo/circle-packing/cjs/nivo-circle-packing.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@nivo/circle-packing/cjs/nivo-circle-packing.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var React__default = _interopDefault(React);
+var PropTypes = _interopDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
+var core = __webpack_require__(/*! @nivo/core */ "./node_modules/@nivo/core/index.js");
+var d3Hierarchy = __webpack_require__(/*! d3-hierarchy */ "./node_modules/d3-hierarchy/src/index.js");
+var compose = _interopDefault(__webpack_require__(/*! recompose/compose */ "./node_modules/recompose/compose.js"));
+var defaultProps = _interopDefault(__webpack_require__(/*! recompose/defaultProps */ "./node_modules/recompose/defaultProps.js"));
+var withPropsOnChange = _interopDefault(__webpack_require__(/*! recompose/withPropsOnChange */ "./node_modules/recompose/withPropsOnChange.js"));
+var withStateHandlers = _interopDefault(__webpack_require__(/*! recompose/withStateHandlers */ "./node_modules/recompose/withStateHandlers.js"));
+var pure = _interopDefault(__webpack_require__(/*! recompose/pure */ "./node_modules/recompose/pure.js"));
+var reactMotion = __webpack_require__(/*! react-motion */ "./node_modules/react-motion/lib/react-motion.js");
+var pick = _interopDefault(__webpack_require__(/*! lodash/pick */ "./node_modules/lodash/pick.js"));
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var computeNodePath = function computeNodePath(node, getIdentity) {
+    return node.ancestors().map(function (ancestor) {
+        return getIdentity(ancestor.data);
+    }).join('.');
+};
+
+var computeNodes = function computeNodes(_ref) {
+    var root = _ref.root,
+        pack = _ref.pack,
+        leavesOnly = _ref.leavesOnly,
+        getIdentity = _ref.getIdentity,
+        getColor = _ref.getColor;
+
+    // assign a unique id depending on node path to each node
+    root.each(function (node) {
+        node.id = getIdentity(node.data);
+        node.path = computeNodePath(node, getIdentity);
+    });
+
+    pack(root);
+
+    var nodes = leavesOnly ? root.leaves() : root.descendants();
+    nodes = nodes.map(function (node) {
+        node.color = getColor(_extends({}, node.data, { depth: node.depth }));
+        node.label = false;
+
+        return node;
+    });
+
+    return nodes;
+};
+
+var computeZoom = function computeZoom(nodes, currentNodePath, width, height) {
+    var currentNode = nodes.find(function (_ref2) {
+        var path = _ref2.path;
+        return path === currentNodePath;
+    });
+
+    if (!currentNode) return nodes;
+
+    var ratio = Math.min(width, height) / (currentNode.r * 2);
+    var offsetX = width / 2 - currentNode.x * ratio;
+    var offsetY = height / 2 - currentNode.y * ratio;
+
+    return nodes.map(function (node) {
+        return _extends({}, node, {
+            r: node.r * ratio,
+            x: node.x * ratio + offsetX,
+            y: node.y * ratio + offsetY
+        });
+    });
+};
+
+var BubbleNode = function BubbleNode(_ref) {
+    var node = _ref.node,
+        style = _ref.style,
+        handlers = _ref.handlers,
+        theme = _ref.theme;
+
+    if (style.r <= 0) return null;
+
+    return React__default.createElement(
+        'g',
+        { transform: 'translate(' + style.x + ',' + style.y + ')' },
+        React__default.createElement('circle', _extends({
+            r: style.r
+        }, handlers, {
+            fill: style.fill ? style.fill : style.color,
+            stroke: style.borderColor,
+            strokeWidth: style.borderWidth
+        })),
+        node.label !== false && React__default.createElement(
+            'text',
+            {
+                textAnchor: 'middle',
+                alignmentBaseline: 'central',
+                style: _extends({}, theme.labels.text, {
+                    fill: style.labelTextColor,
+                    pointerEvents: 'none'
+                })
+            },
+            node.label
+        )
+    );
+};
+
+BubbleNode.propTypes = {
+    node: PropTypes.object.isRequired,
+    style: PropTypes.shape({
+        r: PropTypes.number.isRequired,
+        x: PropTypes.number.isRequired,
+        y: PropTypes.number.isRequired,
+        color: PropTypes.string.isRequired,
+        fill: PropTypes.string,
+        borderWidth: PropTypes.number.isRequired,
+        borderColor: PropTypes.string.isRequired,
+        labelTextColor: PropTypes.string.isRequired
+    }).isRequired,
+    handlers: PropTypes.object.isRequired,
+    theme: core.themePropType.isRequired
+};
+
+var BubbleHtmlNode = function BubbleHtmlNode(_ref) {
+    var node = _ref.node,
+        style = _ref.style,
+        handlers = _ref.handlers;
+
+    if (style.r <= 0) return null;
+
+    return React__default.createElement(
+        'div',
+        _extends({
+            id: (node.data && node.data.id ? node.data.id : // replace special characters with "-"
+            node.id).replace(/[^\w]/gi, '-'),
+            style: {
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: style.color,
+                color: style.labelTextColor,
+                borderWidth: style.borderWidth,
+                borderColor: style.borderColor,
+                top: style.y - style.r,
+                left: style.x - style.r,
+                width: style.r * 2,
+                height: style.r * 2,
+                borderStyle: 'solid',
+                borderRadius: style.r
+            }
+        }, handlers),
+        node.label !== false && node.label
+    );
+};
+
+BubbleHtmlNode.propTypes = {
+    node: PropTypes.object.isRequired,
+    style: PropTypes.shape({
+        r: PropTypes.number.isRequired,
+        x: PropTypes.number.isRequired,
+        y: PropTypes.number.isRequired,
+        color: PropTypes.string.isRequired,
+        fill: PropTypes.string,
+        borderWidth: PropTypes.number.isRequired,
+        borderColor: PropTypes.string.isRequired,
+        labelTextColor: PropTypes.string.isRequired
+    }).isRequired,
+    handlers: PropTypes.object.isRequired
+};
+
+/*—————————————————————————————————————————————————————————————————————————————
+
+  Prop types
+
+—————————————————————————————————————————————————————————————————————————————*/
+
+var commonPropTypes = {
+    // data
+    // `root` managed by `withHierarchy()` HOC
+    identity: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+
+    // dimensions managed by `withDimensions()` HOC
+
+    // styling
+    // theme managed by `withTheme()` HOC
+    // colors managed by `withColors()` HOC
+
+    leavesOnly: PropTypes.bool.isRequired,
+    padding: PropTypes.number.isRequired,
+
+    // border
+    borderWidth: PropTypes.number.isRequired,
+    borderColor: PropTypes.any.isRequired,
+
+    // labels
+    enableLabel: PropTypes.bool.isRequired,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+    labelFormat: PropTypes.string,
+    labelTextColor: PropTypes.any.isRequired,
+    labelSkipRadius: PropTypes.number.isRequired,
+
+    // interactivity
+    isInteractive: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
+    isZoomable: PropTypes.bool.isRequired,
+    tooltipFormat: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    tooltip: PropTypes.func
+};
+
+var BubblePropTypes = _extends({}, commonPropTypes, {
+    nodeComponent: PropTypes.func.isRequired
+}, core.defsPropTypes);
+
+var BubbleHtmlPropTypes = _extends({}, commonPropTypes, {
+    nodeComponent: PropTypes.func.isRequired
+});
+
+var BubbleCanvasPropTypes = _extends({}, commonPropTypes, {
+    pixelRatio: PropTypes.number.isRequired
+
+    /*—————————————————————————————————————————————————————————————————————————————
+    
+      Default props
+    
+    —————————————————————————————————————————————————————————————————————————————*/
+
+});var commonDefaultProps = {
+    identity: 'id',
+
+    leavesOnly: false,
+    padding: 1,
+
+    // border
+    borderWidth: 0,
+    borderColor: 'inherit',
+
+    // labels
+    enableLabel: true,
+    label: 'id',
+    labelTextColor: 'inherit:darker(1)',
+    labelSkipRadius: 8,
+
+    // interactivity
+    isInteractive: true,
+    onClick: core.noop,
+    isZoomable: true
+};
+
+var BubbleDefaultProps = _extends({}, commonDefaultProps, {
+    nodeComponent: BubbleNode,
+    defs: [],
+    fill: []
+});
+
+var BubbleHtmlDefaultProps = _extends({}, commonDefaultProps, {
+    nodeComponent: BubbleHtmlNode
+});
+
+var BubbleCanvasDefaultProps = _extends({}, commonDefaultProps, {
+    pixelRatio: global.window && global.window.devicePixelRatio ? global.window.devicePixelRatio : 1
+});
+
+var props = /*#__PURE__*/Object.freeze({
+  BubblePropTypes: BubblePropTypes,
+  BubbleHtmlPropTypes: BubbleHtmlPropTypes,
+  BubbleCanvasPropTypes: BubbleCanvasPropTypes,
+  BubbleDefaultProps: BubbleDefaultProps,
+  BubbleHtmlDefaultProps: BubbleHtmlDefaultProps,
+  BubbleCanvasDefaultProps: BubbleCanvasDefaultProps
+});
+
+var commonEnhancers = [core.withHierarchy(), core.withDimensions(), core.withTheme(), core.withColors({ defaultColorBy: 'depth' }), withPropsOnChange(['width', 'height', 'padding'], function (_ref) {
+    var width = _ref.width,
+        height = _ref.height,
+        padding = _ref.padding;
+    return {
+        pack: d3Hierarchy.pack().size([width, height]).padding(padding)
+    };
+}), withPropsOnChange(['identity'], function (_ref2) {
+    var identity = _ref2.identity;
+    return {
+        getIdentity: core.getAccessorFor(identity)
+    };
+}),
+
+// border
+withPropsOnChange(['borderColor'], function (_ref3) {
+    var borderColor = _ref3.borderColor;
+    return {
+        getBorderColor: core.getInheritedColorGenerator(borderColor)
+    };
+}),
+
+// labels
+withPropsOnChange(['label', 'labelFormat'], function (_ref4) {
+    var label = _ref4.label,
+        labelFormat = _ref4.labelFormat;
+    return {
+        getLabel: core.getLabelGenerator(label, labelFormat)
+    };
+}), withPropsOnChange(['labelTextColor'], function (_ref5) {
+    var labelTextColor = _ref5.labelTextColor;
+    return {
+        getLabelTextColor: core.getInheritedColorGenerator(labelTextColor)
+    };
+}),
+
+// zoom
+withStateHandlers(function (_ref6) {
+    var _ref6$currentNodePath = _ref6.currentNodePath,
+        currentNodePath = _ref6$currentNodePath === undefined ? null : _ref6$currentNodePath;
+    return {
+        currentNodePath: currentNodePath
+    };
+}, {
+    zoomToNode: function zoomToNode(_ref7) {
+        var currentNodePath = _ref7.currentNodePath;
+        return function (path) {
+            if (path === currentNodePath) return { currentNodePath: null };
+            return { currentNodePath: path };
+        };
+    }
+}), withPropsOnChange(['root', 'pack', 'leavesOnly', 'getIdentity', 'getColor'], function (_ref8) {
+    var root = _ref8.root,
+        pack = _ref8.pack,
+        leavesOnly = _ref8.leavesOnly,
+        getIdentity = _ref8.getIdentity,
+        getColor = _ref8.getColor;
+
+    var nodes = computeNodes({ root: root, pack: pack, leavesOnly: leavesOnly, getIdentity: getIdentity, getColor: getColor });
+
+    return { nodes: nodes };
+}), withPropsOnChange(['enableLabel', 'nodes', 'getLabel', 'labelSkipRadius'], function (_ref9) {
+    var enableLabel = _ref9.enableLabel,
+        nodes = _ref9.nodes,
+        getLabel = _ref9.getLabel,
+        labelSkipRadius = _ref9.labelSkipRadius;
+
+    if (!enableLabel) return;
+    var nodesWithLabel = nodes.map(function (node) {
+        if (node.height !== 0 || labelSkipRadius > 0 && node.r < labelSkipRadius) return node;
+        return _extends({}, node, { label: getLabel(node) });
+    });
+
+    return { nodes: nodesWithLabel };
+}), withPropsOnChange(['nodes', 'isZoomable', 'currentNodePath'], function (_ref10) {
+    var nodes = _ref10.nodes,
+        isZoomable = _ref10.isZoomable,
+        currentNodePath = _ref10.currentNodePath,
+        width = _ref10.width,
+        height = _ref10.height;
+
+    if (currentNodePath && isZoomable) {
+        return {
+            nodes: computeZoom(nodes, currentNodePath, width, height)
+        };
+    }
+})];
+
+var svgEnhancers = [withPropsOnChange(['nodes', 'defs', 'fill'], function (_ref11) {
+    var nodes = _ref11.nodes,
+        defs = _ref11.defs,
+        fill = _ref11.fill;
+
+    return {
+        defs: core.bindDefs(defs, nodes, fill, { targetKey: 'fill' })
+    };
+})];
+
+var enhance = (function (Component) {
+    var implPropTypes = props[Component.displayName + 'PropTypes'];
+    var implDefaultProps = props[Component.displayName + 'DefaultProps'];
+
+    Component.propTypes = implPropTypes;
+
+    switch (Component.displayName) {
+        case 'Bubble':
+            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, svgEnhancers, [core.withMotion(), pure]))(Component);
+
+        case 'BubbleHtml':
+            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, [core.withMotion(), pure]))(Component);
+
+        case 'BubbleCanvas':
+            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, [pure]))(Component);
+    }
+
+    return Component;
+});
+
+var nodeWillEnter = function nodeWillEnter(_ref) {
+    var data = _ref.data;
+    return _extends({
+        scale: 0,
+        r: 0,
+        x: data.x,
+        y: data.y
+    }, core.colorMotionSpring(data.color));
+};
+
+var nodeWillLeave = function nodeWillLeave(springConfig) {
+    return function (_ref2) {
+        var data = _ref2.data;
+        return _extends({
+            scale: reactMotion.spring(0, springConfig),
+            r: reactMotion.spring(0, springConfig),
+            x: reactMotion.spring(data.x, springConfig),
+            y: reactMotion.spring(data.y, springConfig)
+        }, core.colorMotionSpring(data.color, springConfig));
+    };
+};
+
+var getNodeHandlers = function getNodeHandlers(node, _ref) {
+    var isInteractive = _ref.isInteractive,
+        onClick = _ref.onClick,
+        showTooltip = _ref.showTooltip,
+        hideTooltip = _ref.hideTooltip,
+        isZoomable = _ref.isZoomable,
+        zoomToNode = _ref.zoomToNode,
+        theme = _ref.theme,
+        tooltipFormat = _ref.tooltipFormat,
+        tooltip = _ref.tooltip;
+
+    if (!isInteractive) return {};
+
+    var handleTooltip = function handleTooltip(e) {
+        showTooltip(React__default.createElement(core.BasicTooltip, {
+            id: node.id,
+            value: node.value,
+            enableChip: true,
+            color: node.color,
+            theme: theme,
+            format: tooltipFormat,
+            renderContent: typeof tooltip === 'function' ? tooltip.bind(null, _extends({ node: node }, node)) : null
+        }), e);
+    };
+
+    var clickHandler = onClick;
+    if (isZoomable) {
+        clickHandler = function clickHandler(event) {
+            onClick(node, event);
+            zoomToNode(node.path);
+        };
+    } else {
+        clickHandler = function clickHandler(event) {
+            onClick(node, event);
+        };
+    }
+
+    return {
+        onMouseEnter: handleTooltip,
+        onMouseMove: handleTooltip,
+        onMouseLeave: hideTooltip,
+        onClick: clickHandler
+    };
+};
+
+/* eslint-disable react/prop-types */
+
+var Bubble = function Bubble(_ref) {
+    var nodes = _ref.nodes,
+        nodeComponent = _ref.nodeComponent,
+        margin = _ref.margin,
+        outerWidth = _ref.outerWidth,
+        outerHeight = _ref.outerHeight,
+        theme = _ref.theme,
+        borderWidth = _ref.borderWidth,
+        getBorderColor = _ref.getBorderColor,
+        defs = _ref.defs,
+        getLabelTextColor = _ref.getLabelTextColor,
+        animate = _ref.animate,
+        motionStiffness = _ref.motionStiffness,
+        motionDamping = _ref.motionDamping,
+        isInteractive = _ref.isInteractive,
+        onClick = _ref.onClick,
+        tooltipFormat = _ref.tooltipFormat,
+        tooltip = _ref.tooltip,
+        isZoomable = _ref.isZoomable,
+        zoomToNode = _ref.zoomToNode;
+
+    var springConfig = {
+        stiffness: motionStiffness,
+        damping: motionDamping
+    };
+
+    var getHandlers = function getHandlers(node, showTooltip, hideTooltip) {
+        return getNodeHandlers(node, {
+            isInteractive: isInteractive,
+            onClick: onClick,
+            showTooltip: showTooltip,
+            hideTooltip: hideTooltip,
+            isZoomable: isZoomable,
+            zoomToNode: zoomToNode,
+            theme: theme,
+            tooltipFormat: tooltipFormat,
+            tooltip: tooltip
+        });
+    };
+
+    return React__default.createElement(
+        core.Container,
+        { isInteractive: isInteractive, theme: theme },
+        function (_ref2) {
+            var showTooltip = _ref2.showTooltip,
+                hideTooltip = _ref2.hideTooltip;
+            return React__default.createElement(
+                core.SvgWrapper,
+                {
+                    width: outerWidth,
+                    height: outerHeight,
+                    margin: margin,
+                    defs: defs,
+                    theme: theme
+                },
+                !animate && React__default.createElement(
+                    'g',
+                    null,
+                    nodes.map(function (node) {
+                        return React__default.createElement(nodeComponent, {
+                            key: node.path,
+                            node: node,
+                            style: _extends({}, pick(node, ['scale', 'r', 'x', 'y', 'color']), {
+                                fill: node.fill,
+                                borderWidth: borderWidth,
+                                borderColor: getBorderColor(node),
+                                labelTextColor: getLabelTextColor(node)
+                            }),
+                            handlers: getHandlers(node, showTooltip, hideTooltip),
+                            theme: theme
+                        });
+                    })
+                ),
+                animate && React__default.createElement(
+                    reactMotion.TransitionMotion,
+                    {
+                        willEnter: nodeWillEnter,
+                        willLeave: nodeWillLeave(springConfig),
+                        styles: nodes.map(function (node) {
+                            return {
+                                key: node.path,
+                                data: node,
+                                style: _extends({
+                                    scale: reactMotion.spring(1, springConfig),
+                                    r: reactMotion.spring(node.r, springConfig),
+                                    x: reactMotion.spring(node.x, springConfig),
+                                    y: reactMotion.spring(node.y, springConfig),
+                                    opacity: reactMotion.spring(1, springConfig)
+                                }, core.colorMotionSpring(node.color, springConfig))
+                            };
+                        })
+                    },
+                    function (interpolatedStyles) {
+                        return React__default.createElement(
+                            'g',
+                            null,
+                            interpolatedStyles.map(function (_ref3) {
+                                var style = _ref3.style,
+                                    node = _ref3.data;
+
+                                style.color = core.getInterpolatedColor(style);
+
+                                return React__default.createElement(nodeComponent, {
+                                    key: node.path,
+                                    node: node,
+                                    style: _extends({}, style, {
+                                        fill: node.fill,
+                                        borderWidth: borderWidth,
+                                        borderColor: getBorderColor(style),
+                                        labelTextColor: getLabelTextColor(style)
+                                    }),
+                                    handlers: getHandlers(node, showTooltip, hideTooltip),
+                                    theme: theme
+                                });
+                            })
+                        );
+                    }
+                )
+            );
+        }
+    );
+};
+
+Bubble.displayName = 'Bubble';
+
+var enhancedBubble = enhance(Bubble);
+enhancedBubble.displayName = 'Bubble';
+
+var ResponsiveBubble = function ResponsiveBubble(props) {
+    return React__default.createElement(
+        core.ResponsiveWrapper,
+        null,
+        function (_ref) {
+            var width = _ref.width,
+                height = _ref.height;
+            return React__default.createElement(enhancedBubble, _extends({ width: width, height: height }, props));
+        }
+    );
+};
+
+/* eslint-disable react/prop-types */
+
+var BubbleHtml = function BubbleHtml(_ref) {
+    var nodes = _ref.nodes,
+        nodeComponent = _ref.nodeComponent,
+        margin = _ref.margin,
+        outerWidth = _ref.outerWidth,
+        outerHeight = _ref.outerHeight,
+        theme = _ref.theme,
+        borderWidth = _ref.borderWidth,
+        getBorderColor = _ref.getBorderColor,
+        getLabelTextColor = _ref.getLabelTextColor,
+        animate = _ref.animate,
+        motionStiffness = _ref.motionStiffness,
+        motionDamping = _ref.motionDamping,
+        isInteractive = _ref.isInteractive,
+        onClick = _ref.onClick,
+        isZoomable = _ref.isZoomable,
+        zoomToNode = _ref.zoomToNode,
+        tooltipFormat = _ref.tooltipFormat,
+        tooltip = _ref.tooltip;
+
+    var springConfig = {
+        stiffness: motionStiffness,
+        damping: motionDamping
+    };
+
+    var getHandlers = function getHandlers(node, showTooltip, hideTooltip) {
+        return getNodeHandlers(node, {
+            isInteractive: isInteractive,
+            onClick: onClick,
+            showTooltip: showTooltip,
+            hideTooltip: hideTooltip,
+            isZoomable: isZoomable,
+            zoomToNode: zoomToNode,
+            theme: theme,
+            tooltipFormat: tooltipFormat,
+            tooltip: tooltip
+        });
+    };
+
+    return React__default.createElement(
+        core.Container,
+        { isInteractive: isInteractive, theme: theme },
+        function (_ref2) {
+            var showTooltip = _ref2.showTooltip,
+                hideTooltip = _ref2.hideTooltip;
+            return React__default.createElement(
+                'div',
+                {
+                    style: {
+                        position: 'relative',
+                        width: outerWidth,
+                        height: outerHeight
+                    }
+                },
+                !animate && React__default.createElement(
+                    'div',
+                    { style: { position: 'absolute', top: margin.top, left: margin.left } },
+                    nodes.map(function (node) {
+                        return React__default.createElement(nodeComponent, {
+                            key: node.path,
+                            node: node,
+                            style: _extends({}, pick(node, ['scale', 'r', 'x', 'y', 'color']), {
+                                borderWidth: borderWidth,
+                                borderColor: getBorderColor(node),
+                                labelTextColor: getLabelTextColor(node)
+                            }),
+                            handlers: getHandlers(node, showTooltip, hideTooltip)
+                        });
+                    })
+                ),
+                animate && React__default.createElement(
+                    reactMotion.TransitionMotion,
+                    {
+                        willEnter: nodeWillEnter,
+                        willLeave: nodeWillLeave(springConfig),
+                        styles: nodes.map(function (node) {
+                            return {
+                                key: node.path,
+                                data: node,
+                                style: _extends({
+                                    scale: reactMotion.spring(1, springConfig),
+                                    r: reactMotion.spring(node.r, springConfig),
+                                    x: reactMotion.spring(node.x, springConfig),
+                                    y: reactMotion.spring(node.y, springConfig),
+                                    opacity: reactMotion.spring(1, springConfig)
+                                }, core.colorMotionSpring(node.color, springConfig))
+                            };
+                        })
+                    },
+                    function (interpolatedStyles) {
+                        return React__default.createElement(
+                            'div',
+                            {
+                                style: {
+                                    position: 'absolute',
+                                    top: margin.top,
+                                    left: margin.left
+                                }
+                            },
+                            interpolatedStyles.map(function (_ref3) {
+                                var style = _ref3.style,
+                                    node = _ref3.data;
+
+                                style.color = core.getInterpolatedColor(style);
+
+                                return React__default.createElement(nodeComponent, {
+                                    key: node.path,
+                                    node: node,
+                                    style: _extends({}, style, {
+                                        borderWidth: borderWidth,
+                                        borderColor: getBorderColor(style),
+                                        labelTextColor: getLabelTextColor(style)
+                                    }),
+                                    handlers: getHandlers(node, showTooltip, hideTooltip)
+                                });
+                            })
+                        );
+                    }
+                )
+            );
+        }
+    );
+};
+
+BubbleHtml.displayName = 'BubbleHtml';
+
+var enhancedBubbleHtml = enhance(BubbleHtml);
+enhancedBubbleHtml.displayName = 'BubbleHtml';
+
+var ResponsiveBubbleHtml = function ResponsiveBubbleHtml(props) {
+    return React__default.createElement(
+        core.ResponsiveWrapper,
+        null,
+        function (_ref) {
+            var width = _ref.width,
+                height = _ref.height;
+            return React__default.createElement(enhancedBubbleHtml, _extends({ width: width, height: height }, props));
+        }
+    );
+};
+
+/* eslint-disable react/prop-types */
+
+var BubbleCanvas = function (_Component) {
+    inherits(BubbleCanvas, _Component);
+
+    function BubbleCanvas() {
+        classCallCheck(this, BubbleCanvas);
+        return possibleConstructorReturn(this, _Component.apply(this, arguments));
+    }
+
+    BubbleCanvas.prototype.componentDidMount = function componentDidMount() {
+        this.ctx = this.surface.getContext('2d');
+        this.draw(this.props);
+    };
+
+    BubbleCanvas.prototype.componentDidUpdate = function componentDidUpdate() {
+        this.ctx = this.surface.getContext('2d');
+        this.draw(this.props);
+    };
+
+    BubbleCanvas.prototype.draw = function draw(props) {
+        var _this2 = this;
+
+        var nodes = props.nodes,
+            pixelRatio = props.pixelRatio,
+            margin = props.margin,
+            outerWidth = props.outerWidth,
+            outerHeight = props.outerHeight,
+            theme = props.theme,
+            borderWidth = props.borderWidth,
+            getBorderColor = props.getBorderColor,
+            enableLabel = props.enableLabel,
+            getLabel = props.getLabel,
+            labelSkipRadius = props.labelSkipRadius,
+            getLabelTextColor = props.getLabelTextColor;
+
+
+        this.surface.width = outerWidth * pixelRatio;
+        this.surface.height = outerHeight * pixelRatio;
+
+        this.ctx.scale(pixelRatio, pixelRatio);
+        this.ctx.fillStyle = theme.background;
+        this.ctx.fillRect(0, 0, outerWidth, outerHeight);
+        this.ctx.translate(margin.left, margin.top);
+
+        /*
+        Could be used to compute metaballs,
+        grouping nodes by depth + common parent
+        using marching squares, but it really is a bonus feature…
+         const maxDepth = _.maxBy(nodes, 'depth').depth
+        const nodesByDepth = _.range(maxDepth + 1).map(depth =>
+            _.values(
+                _.groupBy(nodes.filter(({ depth: nodeDepth }) => nodeDepth === depth), 'parent.id')
+            )
+        )
+        nodesByDepth.forEach(layer => {
+            layer.forEach(node => {
+                console.log(node)
+            })
+        })
+        */
+
+        nodes.forEach(function (node) {
+            _this2.ctx.save();
+
+            if (borderWidth > 0) {
+                _this2.ctx.strokeStyle = getBorderColor(node);
+                _this2.ctx.lineWidth = borderWidth;
+            }
+
+            _this2.ctx.beginPath();
+            _this2.ctx.arc(node.x, node.y, node.r, 0, 2 * Math.PI);
+            _this2.ctx.fillStyle = node.color;
+            _this2.ctx.fill();
+
+            if (borderWidth > 0) {
+                _this2.ctx.stroke();
+            }
+        });
+
+        if (enableLabel) {
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.font = theme.labels.text.fontSize + 'px sans-serif';
+
+            // draw labels on top
+            nodes.filter(function (_ref) {
+                var r = _ref.r;
+                return r > labelSkipRadius;
+            }).forEach(function (node) {
+                var label = getLabel(node);
+                var labelTextColor = getLabelTextColor(node);
+
+                _this2.ctx.fillStyle = labelTextColor;
+                _this2.ctx.fillText(label, node.x, node.y);
+            });
+        }
+    };
+
+    BubbleCanvas.prototype.render = function render() {
+        var _this3 = this;
+
+        var _props = this.props,
+            outerWidth = _props.outerWidth,
+            outerHeight = _props.outerHeight,
+            pixelRatio = _props.pixelRatio,
+            isInteractive = _props.isInteractive,
+            theme = _props.theme;
+
+
+        return React__default.createElement(
+            core.Container,
+            { isInteractive: isInteractive, theme: theme },
+            function () {
+                return React__default.createElement('canvas', {
+                    ref: function ref(surface) {
+                        _this3.surface = surface;
+                    },
+                    width: outerWidth * pixelRatio,
+                    height: outerHeight * pixelRatio,
+                    style: {
+                        width: outerWidth,
+                        height: outerHeight
+                    }
+                });
+            }
+        );
+    };
+
+    return BubbleCanvas;
+}(React.Component);
+
+BubbleCanvas.displayName = 'BubbleCanvas';
+
+var enhancedBubbleCanvas = enhance(BubbleCanvas);
+enhancedBubbleCanvas.displayName = 'BubbleCanvas';
+
+var ResponsiveBubbleCanvas = function ResponsiveBubbleCanvas(props) {
+    return React__default.createElement(
+        core.ResponsiveWrapper,
+        null,
+        function (_ref) {
+            var width = _ref.width,
+                height = _ref.height;
+            return React__default.createElement(enhancedBubbleCanvas, _extends({ width: width, height: height }, props));
+        }
+    );
+};
+
+exports.Bubble = enhancedBubble;
+exports.ResponsiveBubble = ResponsiveBubble;
+exports.BubbleHtml = enhancedBubbleHtml;
+exports.ResponsiveBubbleHtml = ResponsiveBubbleHtml;
+exports.BubbleCanvas = enhancedBubbleCanvas;
+exports.ResponsiveBubbleCanvas = ResponsiveBubbleCanvas;
+exports.BubblePropTypes = BubblePropTypes;
+exports.BubbleHtmlPropTypes = BubbleHtmlPropTypes;
+exports.BubbleCanvasPropTypes = BubbleCanvasPropTypes;
+exports.BubbleDefaultProps = BubbleDefaultProps;
+exports.BubbleHtmlDefaultProps = BubbleHtmlDefaultProps;
+exports.BubbleCanvasDefaultProps = BubbleCanvasDefaultProps;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/@nivo/circle-packing/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/@nivo/circle-packing/index.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./cjs/nivo-circle-packing */ "./node_modules/@nivo/circle-packing/cjs/nivo-circle-packing.js")
 
 
 /***/ }),
@@ -4388,990 +5497,6 @@ exports.defaultMargin = defaultMargin;
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! ./cjs/nivo-core */ "./node_modules/@nivo/core/cjs/nivo-core.js")
-
-
-/***/ }),
-
-/***/ "./node_modules/@nivo/treemap/cjs/nivo-treemap.js":
-/*!********************************************************!*\
-  !*** ./node_modules/@nivo/treemap/cjs/nivo-treemap.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var React__default = _interopDefault(React);
-var PropTypes = _interopDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
-var core = __webpack_require__(/*! @nivo/core */ "./node_modules/@nivo/core/index.js");
-var d3Hierarchy = __webpack_require__(/*! d3-hierarchy */ "./node_modules/d3-hierarchy/src/index.js");
-var cloneDeep = _interopDefault(__webpack_require__(/*! lodash/cloneDeep */ "./node_modules/lodash/cloneDeep.js"));
-var compose = _interopDefault(__webpack_require__(/*! recompose/compose */ "./node_modules/recompose/compose.js"));
-var defaultProps = _interopDefault(__webpack_require__(/*! recompose/defaultProps */ "./node_modules/recompose/defaultProps.js"));
-var withPropsOnChange = _interopDefault(__webpack_require__(/*! recompose/withPropsOnChange */ "./node_modules/recompose/withPropsOnChange.js"));
-var pure = _interopDefault(__webpack_require__(/*! recompose/pure */ "./node_modules/recompose/pure.js"));
-var reactMotion = __webpack_require__(/*! react-motion */ "./node_modules/react-motion/lib/react-motion.js");
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
-
-var TreeMapNode = function TreeMapNode(_ref) {
-    var style = _ref.style,
-        node = _ref.node,
-        handlers = _ref.handlers,
-        theme = _ref.theme;
-
-    if (style.width <= 0 || style.height <= 0) return null;
-
-    var rotate = node.label && style.orientLabel && style.height > style.width;
-
-    return React__default.createElement(
-        'g',
-        { transform: 'translate(' + style.x + ',' + style.y + ')' },
-        React__default.createElement('rect', _extends({
-            width: style.width,
-            height: style.height,
-            fill: style.fill ? style.fill : style.color,
-            strokeWidth: style.borderWidth,
-            stroke: style.borderColor
-        }, handlers)),
-        node.label && React__default.createElement(
-            'text',
-            {
-                textAnchor: 'middle',
-                alignmentBaseline: 'central',
-                style: _extends({}, theme.labels.text, {
-                    fill: style.labelTextColor,
-                    pointerEvents: 'none'
-                }),
-                transform: 'translate(' + style.width / 2 + ',' + style.height / 2 + ') rotate(' + (rotate ? -90 : 0) + ')'
-            },
-            node.label
-        )
-    );
-};
-
-TreeMapNode.propTypes = {
-    node: PropTypes.object.isRequired,
-    style: PropTypes.shape({
-        x: PropTypes.number.isRequired,
-        y: PropTypes.number.isRequired,
-        width: PropTypes.number.isRequired,
-        height: PropTypes.number.isRequired,
-        color: PropTypes.string.isRequired,
-        borderWidth: PropTypes.number.isRequired,
-        borderColor: PropTypes.string.isRequired,
-        labelTextColor: PropTypes.string.isRequired,
-        orientLabel: PropTypes.bool.isRequired
-    }).isRequired,
-    handlers: PropTypes.object.isRequired,
-    theme: core.themePropType.isRequired
-};
-
-var TreeMapHtmlNode = function TreeMapHtmlNode(_ref) {
-    var node = _ref.node,
-        style = _ref.style,
-        handlers = _ref.handlers;
-
-    if (style.width <= 0 || style.height <= 0) return null;
-
-    var rotate = node.label && style.orientLabel && style.height > style.width;
-
-    return React__default.createElement(
-        'div',
-        _extends({
-            id: (node.data && node.data.id ? node.data.id : // replace special characters with "-"
-            node.id).replace(/[^\w]/gi, '-'),
-            style: {
-                boxSizing: 'border-box',
-                position: 'absolute',
-                top: style.y,
-                left: style.x,
-                width: style.width,
-                height: style.height,
-                background: style.color,
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: style.borderWidth,
-                borderStyle: 'solid',
-                borderColor: style.borderColor
-            }
-        }, handlers),
-        node.label !== false && React__default.createElement(
-            'span',
-            {
-                style: {
-                    color: style.labelTextColor,
-                    transform: 'rotate(' + (rotate ? '-90' : '0') + 'deg)',
-                    WebkitUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    MsUserSelect: 'none',
-                    userSelect: 'none'
-                }
-            },
-            node.label
-        )
-    );
-};
-
-TreeMapHtmlNode.propTypes = {
-    node: PropTypes.object.isRequired,
-    style: PropTypes.shape({
-        x: PropTypes.number.isRequired,
-        y: PropTypes.number.isRequired,
-        width: PropTypes.number.isRequired,
-        height: PropTypes.number.isRequired,
-        color: PropTypes.string.isRequired,
-        borderWidth: PropTypes.number.isRequired,
-        borderColor: PropTypes.string.isRequired,
-        labelTextColor: PropTypes.string.isRequired,
-        orientLabel: PropTypes.bool.isRequired
-    }).isRequired,
-    handlers: PropTypes.object.isRequired
-};
-
-/*—————————————————————————————————————————————————————————————————————————————
-
-  Prop types
-
-—————————————————————————————————————————————————————————————————————————————*/
-
-var commonPropTypes = {
-    // data
-    // `root` managed by `withHierarchy()` HOC
-    identity: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-
-    // dimensions managed by `withDimensions()` HOC
-
-    // styling
-    // theme managed by `withTheme()` HOC
-    // colors managed by `withColors()` HOC
-
-    leavesOnly: PropTypes.bool.isRequired,
-    tile: core.treeMapTilePropType.isRequired,
-    innerPadding: PropTypes.number.isRequired,
-    outerPadding: PropTypes.number.isRequired,
-
-    // labels
-    enableLabel: PropTypes.bool.isRequired,
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-    labelFormat: PropTypes.string,
-    labelSkipSize: PropTypes.number.isRequired,
-    orientLabel: PropTypes.bool.isRequired,
-
-    // border
-    borderWidth: PropTypes.number.isRequired,
-    borderColor: PropTypes.any.isRequired,
-
-    // interactivity
-    isInteractive: PropTypes.bool.isRequired,
-    onClick: PropTypes.func.isRequired,
-    tooltip: PropTypes.func
-};
-
-var TreeMapPropTypes = _extends({}, commonPropTypes, {
-    nodeComponent: PropTypes.func.isRequired
-}, core.defsPropTypes);
-
-var TreeMapHtmlPropTypes = _extends({}, commonPropTypes, {
-    nodeComponent: PropTypes.func.isRequired
-});
-
-var TreeMapCanvasPropTypes = _extends({}, commonPropTypes, {
-    pixelRatio: PropTypes.number.isRequired
-
-    /*—————————————————————————————————————————————————————————————————————————————
-    
-      Default props
-    
-    —————————————————————————————————————————————————————————————————————————————*/
-
-});var commonDefaultProps = {
-    // data
-    identity: 'id',
-
-    tile: 'squarify',
-    leavesOnly: false,
-
-    // labels
-    enableLabel: true,
-    label: 'id',
-    labelSkipSize: 0,
-    labelTextColor: 'inherit:darker(1)',
-    orientLabel: true,
-
-    innerPadding: 0,
-    outerPadding: 0,
-
-    borderWidth: 0,
-    borderColor: 'inherit',
-
-    // interactivity
-    isInteractive: true,
-    onClick: core.noop
-};
-
-var TreeMapDefaultProps = _extends({}, commonDefaultProps, {
-    nodeComponent: TreeMapNode,
-    defs: [],
-    fill: []
-});
-
-var TreeMapHtmlDefaultProps = _extends({}, commonDefaultProps, {
-    nodeComponent: TreeMapHtmlNode
-});
-
-var TreeMapCanvasDefaultProps = _extends({}, commonDefaultProps, {
-    pixelRatio: global.window && global.window.devicePixelRatio ? global.window.devicePixelRatio : 1
-});
-
-var props = /*#__PURE__*/Object.freeze({
-  TreeMapPropTypes: TreeMapPropTypes,
-  TreeMapHtmlPropTypes: TreeMapHtmlPropTypes,
-  TreeMapCanvasPropTypes: TreeMapCanvasPropTypes,
-  TreeMapDefaultProps: TreeMapDefaultProps,
-  TreeMapHtmlDefaultProps: TreeMapHtmlDefaultProps,
-  TreeMapCanvasDefaultProps: TreeMapCanvasDefaultProps
-});
-
-var computeNodePath = function computeNodePath(node, getIdentity) {
-    return node.ancestors().map(function (ancestor) {
-        return getIdentity(ancestor.data);
-    }).join('.');
-};
-
-var commonEnhancers = [core.withHierarchy(), core.withDimensions(), core.withColors({ defaultColorBy: 'depth' }), core.withTheme(), core.withMotion(), withPropsOnChange(['identity'], function (_ref) {
-    var identity = _ref.identity;
-    return {
-        getIdentity: core.getAccessorFor(identity)
-    };
-}), withPropsOnChange(['borderColor'], function (_ref2) {
-    var borderColor = _ref2.borderColor;
-    return {
-        getBorderColor: core.getInheritedColorGenerator(borderColor)
-    };
-}), withPropsOnChange(['label', 'labelFormat'], function (_ref3) {
-    var label = _ref3.label,
-        labelFormat = _ref3.labelFormat;
-    return {
-        getLabel: core.getLabelGenerator(label, labelFormat)
-    };
-}), withPropsOnChange(['labelTextColor'], function (_ref4) {
-    var labelTextColor = _ref4.labelTextColor;
-    return {
-        getLabelTextColor: core.getInheritedColorGenerator(labelTextColor)
-    };
-}), withPropsOnChange(['width', 'height', 'tile', 'innerPadding', 'outerPadding'], function (_ref5) {
-    var width = _ref5.width,
-        height = _ref5.height,
-        tile = _ref5.tile,
-        innerPadding = _ref5.innerPadding,
-        outerPadding = _ref5.outerPadding;
-    return {
-        treemap: d3Hierarchy.treemap().size([width, height]).tile(core.treeMapTileFromProp(tile)).round(true).paddingInner(innerPadding).paddingOuter(outerPadding)
-    };
-}), withPropsOnChange(['root', 'treemap', 'leavesOnly', 'getIdentity', 'getColor'], function (_ref6) {
-    var _root = _ref6.root,
-        treemap = _ref6.treemap,
-        leavesOnly = _ref6.leavesOnly,
-        getIdentity = _ref6.getIdentity,
-        getColor = _ref6.getColor;
-
-    var root = cloneDeep(_root);
-
-    treemap(root);
-
-    var nodes = leavesOnly ? root.leaves() : root.descendants();
-    nodes = nodes.map(function (d) {
-        d.path = computeNodePath(d, getIdentity);
-
-        d.nodeHeight = d.height;
-
-        d.x = d.x0;
-        d.y = d.y0;
-        d.width = d.x1 - d.x0;
-        d.height = d.y1 - d.y0;
-        d.data.color = d.color = getColor(_extends({}, d.data, { depth: d.depth }));
-
-        d.data.id = d.id = getIdentity(d.data);
-        d.data.value = d.value;
-
-        return d;
-    });
-
-    return { nodes: nodes };
-}), withPropsOnChange(['enableLabel', 'nodes', 'getLabel', 'labelSkipSize'], function (_ref7) {
-    var enableLabel = _ref7.enableLabel,
-        nodes = _ref7.nodes,
-        getLabel = _ref7.getLabel,
-        labelSkipSize = _ref7.labelSkipSize;
-
-    if (!enableLabel) return;
-
-    var nodesWithLabel = nodes.map(function (node) {
-        if (node.nodeHeight > 0 || labelSkipSize !== 0 && Math.min(node.width, node.height) <= labelSkipSize) return node;
-        return _extends({}, node, { label: getLabel(node.data) });
-    });
-
-    return { nodes: nodesWithLabel };
-})];
-
-var svgEnhancers = [withPropsOnChange(['nodes', 'defs', 'fill'], function (_ref8) {
-    var nodes = _ref8.nodes,
-        defs = _ref8.defs,
-        fill = _ref8.fill;
-
-    return {
-        defs: core.bindDefs(defs, nodes, fill, { targetKey: 'fill' })
-    };
-})];
-
-var enhance = (function (Component) {
-    var implDefaultProps = props[Component.displayName + 'DefaultProps'];
-
-    switch (Component.displayName) {
-        case 'TreeMap':
-            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, svgEnhancers, [core.withMotion(), pure]))(Component);
-
-        case 'TreeMapHtml':
-            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, [core.withMotion(), pure]))(Component);
-
-        case 'TreeMapCanvas':
-            return compose.apply(undefined, [defaultProps(implDefaultProps)].concat(commonEnhancers, [pure]))(Component);
-    }
-
-    return Component;
-});
-
-var nodeWillEnter = function nodeWillEnter(_ref) {
-    var node = _ref.data;
-    return _extends({
-        x: node.x,
-        y: node.y,
-        width: node.width,
-        height: node.height
-    }, core.colorMotionSpring(node.color));
-};
-
-var nodeWillLeave = function nodeWillLeave(springConfig) {
-    return function (_ref2) {
-        var node = _ref2.data;
-        return _extends({
-            x: reactMotion.spring(node.x + node.width / 2, springConfig),
-            y: reactMotion.spring(node.y + node.height / 2, springConfig),
-            width: reactMotion.spring(0, springConfig),
-            height: reactMotion.spring(0, springConfig)
-        }, core.colorMotionSpring(node.color, springConfig));
-    };
-};
-
-var TreeMapNodeTooltip = function TreeMapNodeTooltip(_ref) {
-    var node = _ref.node,
-        theme = _ref.theme,
-        tooltip = _ref.tooltip;
-    return React__default.createElement(core.BasicTooltip, {
-        id: node.id,
-        value: node.value,
-        enableChip: true,
-        color: node.color,
-        theme: theme,
-        renderContent: typeof tooltip === 'function' ? tooltip.bind(null, _extends({ node: node }, node)) : null
-    });
-};
-
-TreeMapNodeTooltip.propTypes = {
-    node: PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        value: PropTypes.number.isRequired,
-        color: PropTypes.string.isRequired
-    }).isRequired,
-    theme: PropTypes.object.isRequired,
-    tooltip: PropTypes.func
-};
-
-var TreeMapNodeTooltip$1 = pure(TreeMapNodeTooltip);
-
-var getNodeHandlers = function getNodeHandlers(node, _ref) {
-    var isInteractive = _ref.isInteractive,
-        _onClick = _ref.onClick,
-        showTooltip = _ref.showTooltip,
-        hideTooltip = _ref.hideTooltip,
-        theme = _ref.theme,
-        tooltip = _ref.tooltip;
-
-    if (!isInteractive) return {};
-
-    var handleTooltip = function handleTooltip(e) {
-        showTooltip(React__default.createElement(TreeMapNodeTooltip$1, { node: node, theme: theme, tooltip: tooltip }), e);
-    };
-
-    return {
-        onMouseEnter: handleTooltip,
-        onMouseMove: handleTooltip,
-        onMouseLeave: hideTooltip,
-        onClick: function onClick(event) {
-            return _onClick(node, event);
-        }
-    };
-};
-
-var TreeMap = function TreeMap(_ref) {
-    var nodes = _ref.nodes,
-        nodeComponent = _ref.nodeComponent,
-        margin = _ref.margin,
-        outerWidth = _ref.outerWidth,
-        outerHeight = _ref.outerHeight,
-        theme = _ref.theme,
-        borderWidth = _ref.borderWidth,
-        getBorderColor = _ref.getBorderColor,
-        defs = _ref.defs,
-        getLabelTextColor = _ref.getLabelTextColor,
-        orientLabel = _ref.orientLabel,
-        animate = _ref.animate,
-        motionStiffness = _ref.motionStiffness,
-        motionDamping = _ref.motionDamping,
-        isInteractive = _ref.isInteractive,
-        onClick = _ref.onClick,
-        tooltipFormat = _ref.tooltipFormat,
-        tooltip = _ref.tooltip;
-
-    var springConfig = {
-        stiffness: motionStiffness,
-        damping: motionDamping
-    };
-
-    var getHandlers = function getHandlers(node, showTooltip, hideTooltip) {
-        return getNodeHandlers(node, {
-            isInteractive: isInteractive,
-            onClick: onClick,
-            showTooltip: showTooltip,
-            hideTooltip: hideTooltip,
-            theme: theme,
-            tooltipFormat: tooltipFormat,
-            tooltip: tooltip
-        });
-    };
-
-    return React__default.createElement(
-        core.Container,
-        { isInteractive: isInteractive, theme: theme },
-        function (_ref2) {
-            var showTooltip = _ref2.showTooltip,
-                hideTooltip = _ref2.hideTooltip;
-            return React__default.createElement(
-                core.SvgWrapper,
-                {
-                    width: outerWidth,
-                    height: outerHeight,
-                    margin: margin,
-                    defs: defs,
-                    theme: theme
-                },
-                !animate && React__default.createElement(
-                    'g',
-                    null,
-                    nodes.map(function (node) {
-                        return React__default.createElement(nodeComponent, {
-                            key: node.path,
-                            node: node,
-                            style: {
-                                fill: node.fill,
-                                x: node.x0,
-                                y: node.y0,
-                                width: node.width,
-                                height: node.height,
-                                color: node.color,
-                                borderWidth: borderWidth,
-                                borderColor: getBorderColor(node),
-                                labelTextColor: getLabelTextColor(node),
-                                orientLabel: orientLabel
-                            },
-                            handlers: getHandlers(node, showTooltip, hideTooltip),
-                            theme: theme
-                        });
-                    })
-                ),
-                animate && React__default.createElement(
-                    reactMotion.TransitionMotion,
-                    {
-                        willEnter: nodeWillEnter,
-                        willLeave: nodeWillLeave(springConfig),
-                        styles: nodes.map(function (node) {
-                            return {
-                                key: node.path,
-                                data: node,
-                                style: _extends({
-                                    x: reactMotion.spring(node.x, springConfig),
-                                    y: reactMotion.spring(node.y, springConfig),
-                                    width: reactMotion.spring(node.width, springConfig),
-                                    height: reactMotion.spring(node.height, springConfig)
-                                }, core.colorMotionSpring(node.color, springConfig))
-                            };
-                        })
-                    },
-                    function (interpolatedStyles) {
-                        return React__default.createElement(
-                            'g',
-                            null,
-                            interpolatedStyles.map(function (_ref3) {
-                                var style = _ref3.style,
-                                    node = _ref3.data;
-
-                                style.color = core.getInterpolatedColor(style);
-
-                                return React__default.createElement(nodeComponent, {
-                                    key: node.path,
-                                    node: node,
-                                    style: _extends({}, style, {
-                                        fill: node.fill,
-                                        borderWidth: borderWidth,
-                                        borderColor: getBorderColor(style),
-                                        labelTextColor: getLabelTextColor(style),
-                                        orientLabel: orientLabel
-                                    }),
-                                    handlers: getHandlers(node, showTooltip, hideTooltip),
-                                    theme: theme
-                                });
-                            })
-                        );
-                    }
-                )
-            );
-        }
-    );
-};
-
-TreeMap.propTypes = TreeMapPropTypes;
-TreeMap.displayName = 'TreeMap';
-
-var enhancedTreeMap = enhance(TreeMap);
-enhancedTreeMap.displayName = 'TreeMap';
-
-var ResponsiveTreeMap = function ResponsiveTreeMap(props) {
-    return React__default.createElement(
-        core.ResponsiveWrapper,
-        null,
-        function (_ref) {
-            var width = _ref.width,
-                height = _ref.height;
-            return React__default.createElement(enhancedTreeMap, _extends({ width: width, height: height }, props));
-        }
-    );
-};
-
-var TreeMapHtml = function TreeMapHtml(_ref) {
-    var nodes = _ref.nodes,
-        nodeComponent = _ref.nodeComponent,
-        margin = _ref.margin,
-        outerWidth = _ref.outerWidth,
-        outerHeight = _ref.outerHeight,
-        theme = _ref.theme,
-        borderWidth = _ref.borderWidth,
-        getBorderColor = _ref.getBorderColor,
-        getLabelTextColor = _ref.getLabelTextColor,
-        orientLabel = _ref.orientLabel,
-        animate = _ref.animate,
-        motionStiffness = _ref.motionStiffness,
-        motionDamping = _ref.motionDamping,
-        isInteractive = _ref.isInteractive,
-        onClick = _ref.onClick,
-        tooltipFormat = _ref.tooltipFormat,
-        tooltip = _ref.tooltip;
-
-    var springConfig = {
-        stiffness: motionStiffness,
-        damping: motionDamping
-    };
-
-    var getHandlers = function getHandlers(node, showTooltip, hideTooltip) {
-        return getNodeHandlers(node, {
-            isInteractive: isInteractive,
-            onClick: onClick,
-            showTooltip: showTooltip,
-            hideTooltip: hideTooltip,
-            theme: theme,
-            tooltipFormat: tooltipFormat,
-            tooltip: tooltip
-        });
-    };
-
-    return React__default.createElement(
-        core.Container,
-        { theme: theme },
-        function (_ref2) {
-            var showTooltip = _ref2.showTooltip,
-                hideTooltip = _ref2.hideTooltip;
-            return React__default.createElement(
-                'div',
-                {
-                    style: {
-                        position: 'relative',
-                        width: outerWidth,
-                        height: outerHeight
-                    }
-                },
-                !animate && React__default.createElement(
-                    'div',
-                    { style: { position: 'absolute', top: margin.top, left: margin.left } },
-                    nodes.map(function (node) {
-                        return React__default.createElement(nodeComponent, {
-                            key: node.path,
-                            node: node,
-                            style: {
-                                x: node.x,
-                                y: node.y,
-                                width: node.width,
-                                height: node.height,
-                                color: node.color,
-                                borderWidth: borderWidth,
-                                borderColor: getBorderColor(node),
-                                labelTextColor: getLabelTextColor(node),
-                                orientLabel: orientLabel
-                            },
-                            handlers: getHandlers(node, showTooltip, hideTooltip)
-                        });
-                    })
-                ),
-                animate && React__default.createElement(
-                    reactMotion.TransitionMotion,
-                    {
-                        willEnter: nodeWillEnter,
-                        willLeave: nodeWillLeave(springConfig),
-                        styles: nodes.map(function (node) {
-                            return {
-                                key: node.path,
-                                data: node,
-                                style: _extends({
-                                    x: reactMotion.spring(node.x, springConfig),
-                                    y: reactMotion.spring(node.y, springConfig),
-                                    width: reactMotion.spring(node.width, springConfig),
-                                    height: reactMotion.spring(node.height, springConfig)
-                                }, core.colorMotionSpring(node.color, springConfig))
-                            };
-                        })
-                    },
-                    function (interpolatedStyles) {
-                        return React__default.createElement(
-                            'div',
-                            {
-                                style: {
-                                    position: 'absolute',
-                                    top: margin.top,
-                                    left: margin.left
-                                }
-                            },
-                            interpolatedStyles.map(function (_ref3) {
-                                var style = _ref3.style,
-                                    node = _ref3.data;
-
-                                style.color = core.getInterpolatedColor(style);
-
-                                return React__default.createElement(nodeComponent, {
-                                    key: node.path,
-                                    node: node,
-                                    style: _extends({}, style, {
-                                        fill: node.fill,
-                                        borderWidth: borderWidth,
-                                        borderColor: getBorderColor(style),
-                                        labelTextColor: getLabelTextColor(style),
-                                        orientLabel: orientLabel
-                                    }),
-                                    handlers: getHandlers(node, showTooltip, hideTooltip)
-                                });
-                            })
-                        );
-                    }
-                )
-            );
-        }
-    );
-};
-
-TreeMapHtml.propTypes = TreeMapHtmlPropTypes;
-TreeMapHtml.displayName = 'TreeMapHtml';
-
-var enhancedTreeMapHtml = enhance(TreeMapHtml);
-enhancedTreeMapHtml.displayName = 'TreeMapHtml';
-
-var ResponsiveTreeMapHtml = function ResponsiveTreeMapHtml(props) {
-    return React__default.createElement(
-        core.ResponsiveWrapper,
-        null,
-        function (_ref) {
-            var width = _ref.width,
-                height = _ref.height;
-            return React__default.createElement(enhancedTreeMapHtml, _extends({ width: width, height: height }, props));
-        }
-    );
-};
-
-var findNodeUnderCursor = function findNodeUnderCursor(nodes, margin, x, y) {
-    return nodes.find(function (node) {
-        return core.isCursorInRect(node.x + margin.left, node.y + margin.top, node.width, node.height, x, y);
-    });
-};
-
-var TreeMapCanvas = function (_Component) {
-    inherits(TreeMapCanvas, _Component);
-
-    function TreeMapCanvas() {
-        var _temp, _this, _ret;
-
-        classCallCheck(this, TreeMapCanvas);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.handleMouseHover = function (showTooltip, hideTooltip) {
-            return function (event) {
-                var _this$props = _this.props,
-                    isInteractive = _this$props.isInteractive,
-                    nodes = _this$props.nodes,
-                    margin = _this$props.margin,
-                    theme = _this$props.theme;
-
-
-                if (!isInteractive) return;
-
-                var _getRelativeCursor = core.getRelativeCursor(_this.surface, event),
-                    x = _getRelativeCursor[0],
-                    y = _getRelativeCursor[1];
-
-                var node = findNodeUnderCursor(nodes, margin, x, y);
-
-                if (node !== undefined) {
-                    showTooltip(React__default.createElement(TreeMapNodeTooltip$1, { node: node, theme: theme }), event);
-                } else {
-                    hideTooltip();
-                }
-            };
-        }, _this.handleMouseLeave = function (hideTooltip) {
-            return function () {
-                hideTooltip();
-            };
-        }, _this.handleClick = function (event) {
-            var _this$props2 = _this.props,
-                isInteractive = _this$props2.isInteractive,
-                nodes = _this$props2.nodes,
-                margin = _this$props2.margin,
-                onClick = _this$props2.onClick;
-
-
-            if (!isInteractive) return;
-
-            var _getRelativeCursor2 = core.getRelativeCursor(_this.surface, event),
-                x = _getRelativeCursor2[0],
-                y = _getRelativeCursor2[1];
-
-            var node = findNodeUnderCursor(nodes, margin, x, y);
-            if (node !== undefined) onClick(node, event);
-        }, _temp), possibleConstructorReturn(_this, _ret);
-    }
-
-    TreeMapCanvas.prototype.componentDidMount = function componentDidMount() {
-        this.ctx = this.surface.getContext('2d');
-        this.draw(this.props);
-    };
-
-    TreeMapCanvas.prototype.componentDidUpdate = function componentDidUpdate() {
-        this.ctx = this.surface.getContext('2d');
-        this.draw(this.props);
-    };
-
-    TreeMapCanvas.prototype.draw = function draw(props) {
-        var _this2 = this;
-
-        var nodes = props.nodes,
-            pixelRatio = props.pixelRatio,
-            margin = props.margin,
-            outerWidth = props.outerWidth,
-            outerHeight = props.outerHeight,
-            borderWidth = props.borderWidth,
-            getBorderColor = props.getBorderColor,
-            enableLabel = props.enableLabel,
-            getLabelTextColor = props.getLabelTextColor,
-            orientLabel = props.orientLabel,
-            theme = props.theme;
-
-
-        this.surface.width = outerWidth * pixelRatio;
-        this.surface.height = outerHeight * pixelRatio;
-
-        this.ctx.scale(pixelRatio, pixelRatio);
-
-        this.ctx.fillStyle = theme.background;
-        this.ctx.fillRect(0, 0, outerWidth, outerHeight);
-        this.ctx.translate(margin.left, margin.top);
-
-        nodes.forEach(function (node) {
-            _this2.ctx.fillStyle = node.color;
-            _this2.ctx.fillRect(node.x, node.y, node.width, node.height);
-
-            if (borderWidth > 0) {
-                _this2.ctx.strokeStyle = getBorderColor(node);
-                _this2.ctx.lineWidth = borderWidth;
-                _this2.ctx.strokeRect(node.x, node.y, node.width, node.height);
-            }
-        });
-
-        if (enableLabel) {
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            this.ctx.font = theme.labels.text.fontSize + 'px sans-serif';
-
-            // draw labels on top
-            nodes.filter(function (_ref) {
-                var label = _ref.label;
-                return label !== undefined;
-            }).forEach(function (node) {
-                var labelTextColor = getLabelTextColor(node);
-
-                var rotate = orientLabel && node.height > node.width;
-
-                _this2.ctx.save();
-                _this2.ctx.translate(node.x + node.width / 2, node.y + node.height / 2);
-                _this2.ctx.rotate(core.degreesToRadians(rotate ? -90 : 0));
-
-                _this2.ctx.fillStyle = labelTextColor;
-                _this2.ctx.fillText(node.label, 0, 0);
-
-                _this2.ctx.restore();
-            });
-        }
-    };
-
-    TreeMapCanvas.prototype.render = function render() {
-        var _this3 = this;
-
-        var _props = this.props,
-            outerWidth = _props.outerWidth,
-            outerHeight = _props.outerHeight,
-            pixelRatio = _props.pixelRatio,
-            isInteractive = _props.isInteractive,
-            theme = _props.theme;
-
-
-        return React__default.createElement(
-            core.Container,
-            { isInteractive: isInteractive, theme: theme },
-            function (_ref2) {
-                var showTooltip = _ref2.showTooltip,
-                    hideTooltip = _ref2.hideTooltip;
-                return React__default.createElement('canvas', {
-                    ref: function ref(surface) {
-                        _this3.surface = surface;
-                    },
-                    width: outerWidth * pixelRatio,
-                    height: outerHeight * pixelRatio,
-                    style: {
-                        width: outerWidth,
-                        height: outerHeight
-                    },
-                    onMouseEnter: _this3.handleMouseHover(showTooltip, hideTooltip),
-                    onMouseMove: _this3.handleMouseHover(showTooltip, hideTooltip),
-                    onMouseLeave: _this3.handleMouseLeave(hideTooltip),
-                    onClick: _this3.handleClick
-                });
-            }
-        );
-    };
-
-    return TreeMapCanvas;
-}(React.Component);
-
-TreeMapCanvas.propTypes = TreeMapCanvasPropTypes;
-TreeMapCanvas.displayName = 'TreeMapCanvas';
-
-var enhancedTreeMapCanvas = enhance(TreeMapCanvas);
-enhancedTreeMapCanvas.displayName = 'TreeMapCanvas';
-
-var ResponsiveTreeMapCanvas = function ResponsiveTreeMapCanvas(props) {
-    return React__default.createElement(
-        core.ResponsiveWrapper,
-        null,
-        function (_ref) {
-            var width = _ref.width,
-                height = _ref.height;
-            return React__default.createElement(enhancedTreeMapCanvas, _extends({ width: width, height: height }, props));
-        }
-    );
-};
-
-exports.TreeMap = enhancedTreeMap;
-exports.ResponsiveTreeMap = ResponsiveTreeMap;
-exports.TreeMapHtml = enhancedTreeMapHtml;
-exports.ResponsiveTreeMapHtml = ResponsiveTreeMapHtml;
-exports.TreeMapCanvas = enhancedTreeMapCanvas;
-exports.ResponsiveTreeMapCanvas = ResponsiveTreeMapCanvas;
-exports.TreeMapPropTypes = TreeMapPropTypes;
-exports.TreeMapHtmlPropTypes = TreeMapHtmlPropTypes;
-exports.TreeMapCanvasPropTypes = TreeMapCanvasPropTypes;
-exports.TreeMapDefaultProps = TreeMapDefaultProps;
-exports.TreeMapHtmlDefaultProps = TreeMapHtmlDefaultProps;
-exports.TreeMapCanvasDefaultProps = TreeMapCanvasDefaultProps;
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./node_modules/@nivo/treemap/index.js":
-/*!*********************************************!*\
-  !*** ./node_modules/@nivo/treemap/index.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! ./cjs/nivo-treemap */ "./node_modules/@nivo/treemap/cjs/nivo-treemap.js")
 
 
 /***/ }),
@@ -22932,62 +23057,6 @@ module.exports = assocIndexOf;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/_baseAssign.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_baseAssign.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var copyObject = __webpack_require__(/*! ./_copyObject */ "./node_modules/lodash/_copyObject.js"),
-    keys = __webpack_require__(/*! ./keys */ "./node_modules/lodash/keys.js");
-
-/**
- * The base implementation of `_.assign` without support for multiple sources
- * or `customizer` functions.
- *
- * @private
- * @param {Object} object The destination object.
- * @param {Object} source The source object.
- * @returns {Object} Returns `object`.
- */
-function baseAssign(object, source) {
-  return object && copyObject(source, keys(source), object);
-}
-
-module.exports = baseAssign;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseAssignIn.js":
-/*!**********************************************!*\
-  !*** ./node_modules/lodash/_baseAssignIn.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var copyObject = __webpack_require__(/*! ./_copyObject */ "./node_modules/lodash/_copyObject.js"),
-    keysIn = __webpack_require__(/*! ./keysIn */ "./node_modules/lodash/keysIn.js");
-
-/**
- * The base implementation of `_.assignIn` without support for multiple sources
- * or `customizer` functions.
- *
- * @private
- * @param {Object} object The destination object.
- * @param {Object} source The source object.
- * @returns {Object} Returns `object`.
- */
-function baseAssignIn(object, source) {
-  return object && copyObject(source, keysIn(source), object);
-}
-
-module.exports = baseAssignIn;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/_baseAssignValue.js":
 /*!*************************************************!*\
   !*** ./node_modules/lodash/_baseAssignValue.js ***!
@@ -23020,188 +23089,6 @@ function baseAssignValue(object, key, value) {
 }
 
 module.exports = baseAssignValue;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseClone.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_baseClone.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Stack = __webpack_require__(/*! ./_Stack */ "./node_modules/lodash/_Stack.js"),
-    arrayEach = __webpack_require__(/*! ./_arrayEach */ "./node_modules/lodash/_arrayEach.js"),
-    assignValue = __webpack_require__(/*! ./_assignValue */ "./node_modules/lodash/_assignValue.js"),
-    baseAssign = __webpack_require__(/*! ./_baseAssign */ "./node_modules/lodash/_baseAssign.js"),
-    baseAssignIn = __webpack_require__(/*! ./_baseAssignIn */ "./node_modules/lodash/_baseAssignIn.js"),
-    cloneBuffer = __webpack_require__(/*! ./_cloneBuffer */ "./node_modules/lodash/_cloneBuffer.js"),
-    copyArray = __webpack_require__(/*! ./_copyArray */ "./node_modules/lodash/_copyArray.js"),
-    copySymbols = __webpack_require__(/*! ./_copySymbols */ "./node_modules/lodash/_copySymbols.js"),
-    copySymbolsIn = __webpack_require__(/*! ./_copySymbolsIn */ "./node_modules/lodash/_copySymbolsIn.js"),
-    getAllKeys = __webpack_require__(/*! ./_getAllKeys */ "./node_modules/lodash/_getAllKeys.js"),
-    getAllKeysIn = __webpack_require__(/*! ./_getAllKeysIn */ "./node_modules/lodash/_getAllKeysIn.js"),
-    getTag = __webpack_require__(/*! ./_getTag */ "./node_modules/lodash/_getTag.js"),
-    initCloneArray = __webpack_require__(/*! ./_initCloneArray */ "./node_modules/lodash/_initCloneArray.js"),
-    initCloneByTag = __webpack_require__(/*! ./_initCloneByTag */ "./node_modules/lodash/_initCloneByTag.js"),
-    initCloneObject = __webpack_require__(/*! ./_initCloneObject */ "./node_modules/lodash/_initCloneObject.js"),
-    isArray = __webpack_require__(/*! ./isArray */ "./node_modules/lodash/isArray.js"),
-    isBuffer = __webpack_require__(/*! ./isBuffer */ "./node_modules/lodash/isBuffer.js"),
-    isMap = __webpack_require__(/*! ./isMap */ "./node_modules/lodash/isMap.js"),
-    isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js"),
-    isSet = __webpack_require__(/*! ./isSet */ "./node_modules/lodash/isSet.js"),
-    keys = __webpack_require__(/*! ./keys */ "./node_modules/lodash/keys.js");
-
-/** Used to compose bitmasks for cloning. */
-var CLONE_DEEP_FLAG = 1,
-    CLONE_FLAT_FLAG = 2,
-    CLONE_SYMBOLS_FLAG = 4;
-
-/** `Object#toString` result references. */
-var argsTag = '[object Arguments]',
-    arrayTag = '[object Array]',
-    boolTag = '[object Boolean]',
-    dateTag = '[object Date]',
-    errorTag = '[object Error]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]',
-    mapTag = '[object Map]',
-    numberTag = '[object Number]',
-    objectTag = '[object Object]',
-    regexpTag = '[object RegExp]',
-    setTag = '[object Set]',
-    stringTag = '[object String]',
-    symbolTag = '[object Symbol]',
-    weakMapTag = '[object WeakMap]';
-
-var arrayBufferTag = '[object ArrayBuffer]',
-    dataViewTag = '[object DataView]',
-    float32Tag = '[object Float32Array]',
-    float64Tag = '[object Float64Array]',
-    int8Tag = '[object Int8Array]',
-    int16Tag = '[object Int16Array]',
-    int32Tag = '[object Int32Array]',
-    uint8Tag = '[object Uint8Array]',
-    uint8ClampedTag = '[object Uint8ClampedArray]',
-    uint16Tag = '[object Uint16Array]',
-    uint32Tag = '[object Uint32Array]';
-
-/** Used to identify `toStringTag` values supported by `_.clone`. */
-var cloneableTags = {};
-cloneableTags[argsTag] = cloneableTags[arrayTag] =
-cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
-cloneableTags[boolTag] = cloneableTags[dateTag] =
-cloneableTags[float32Tag] = cloneableTags[float64Tag] =
-cloneableTags[int8Tag] = cloneableTags[int16Tag] =
-cloneableTags[int32Tag] = cloneableTags[mapTag] =
-cloneableTags[numberTag] = cloneableTags[objectTag] =
-cloneableTags[regexpTag] = cloneableTags[setTag] =
-cloneableTags[stringTag] = cloneableTags[symbolTag] =
-cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
-cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
-cloneableTags[errorTag] = cloneableTags[funcTag] =
-cloneableTags[weakMapTag] = false;
-
-/**
- * The base implementation of `_.clone` and `_.cloneDeep` which tracks
- * traversed objects.
- *
- * @private
- * @param {*} value The value to clone.
- * @param {boolean} bitmask The bitmask flags.
- *  1 - Deep clone
- *  2 - Flatten inherited properties
- *  4 - Clone symbols
- * @param {Function} [customizer] The function to customize cloning.
- * @param {string} [key] The key of `value`.
- * @param {Object} [object] The parent object of `value`.
- * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
- * @returns {*} Returns the cloned value.
- */
-function baseClone(value, bitmask, customizer, key, object, stack) {
-  var result,
-      isDeep = bitmask & CLONE_DEEP_FLAG,
-      isFlat = bitmask & CLONE_FLAT_FLAG,
-      isFull = bitmask & CLONE_SYMBOLS_FLAG;
-
-  if (customizer) {
-    result = object ? customizer(value, key, object, stack) : customizer(value);
-  }
-  if (result !== undefined) {
-    return result;
-  }
-  if (!isObject(value)) {
-    return value;
-  }
-  var isArr = isArray(value);
-  if (isArr) {
-    result = initCloneArray(value);
-    if (!isDeep) {
-      return copyArray(value, result);
-    }
-  } else {
-    var tag = getTag(value),
-        isFunc = tag == funcTag || tag == genTag;
-
-    if (isBuffer(value)) {
-      return cloneBuffer(value, isDeep);
-    }
-    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
-      result = (isFlat || isFunc) ? {} : initCloneObject(value);
-      if (!isDeep) {
-        return isFlat
-          ? copySymbolsIn(value, baseAssignIn(result, value))
-          : copySymbols(value, baseAssign(result, value));
-      }
-    } else {
-      if (!cloneableTags[tag]) {
-        return object ? value : {};
-      }
-      result = initCloneByTag(value, tag, isDeep);
-    }
-  }
-  // Check for circular references and return its corresponding clone.
-  stack || (stack = new Stack);
-  var stacked = stack.get(value);
-  if (stacked) {
-    return stacked;
-  }
-  stack.set(value, result);
-
-  if (isSet(value)) {
-    value.forEach(function(subValue) {
-      result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
-    });
-
-    return result;
-  }
-
-  if (isMap(value)) {
-    value.forEach(function(subValue, key) {
-      result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
-    });
-
-    return result;
-  }
-
-  var keysFunc = isFull
-    ? (isFlat ? getAllKeysIn : getAllKeys)
-    : (isFlat ? keysIn : keys);
-
-  var props = isArr ? undefined : keysFunc(value);
-  arrayEach(props || value, function(subValue, key) {
-    if (props) {
-      key = subValue;
-      subValue = value[key];
-    }
-    // Recursively populate clone (susceptible to call stack limits).
-    assignValue(result, key, baseClone(subValue, bitmask, customizer, key, value, stack));
-  });
-  return result;
-}
-
-module.exports = baseClone;
 
 
 /***/ }),
@@ -23758,35 +23645,6 @@ module.exports = baseIsEqualDeep;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/_baseIsMap.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_baseIsMap.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var getTag = __webpack_require__(/*! ./_getTag */ "./node_modules/lodash/_getTag.js"),
-    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
-
-/** `Object#toString` result references. */
-var mapTag = '[object Map]';
-
-/**
- * The base implementation of `_.isMap` without Node.js optimizations.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a map, else `false`.
- */
-function baseIsMap(value) {
-  return isObjectLike(value) && getTag(value) == mapTag;
-}
-
-module.exports = baseIsMap;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/_baseIsNaN.js":
 /*!*******************************************!*\
   !*** ./node_modules/lodash/_baseIsNaN.js ***!
@@ -23864,35 +23722,6 @@ function baseIsNative(value) {
 }
 
 module.exports = baseIsNative;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseIsSet.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_baseIsSet.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var getTag = __webpack_require__(/*! ./_getTag */ "./node_modules/lodash/_getTag.js"),
-    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
-
-/** `Object#toString` result references. */
-var setTag = '[object Set]';
-
-/**
- * The base implementation of `_.isSet` without Node.js optimizations.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a set, else `false`.
- */
-function baseIsSet(value) {
-  return isObjectLike(value) && getTag(value) == setTag;
-}
-
-module.exports = baseIsSet;
 
 
 /***/ }),
@@ -24684,90 +24513,6 @@ module.exports = cloneBuffer;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/_cloneDataView.js":
-/*!***********************************************!*\
-  !*** ./node_modules/lodash/_cloneDataView.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var cloneArrayBuffer = __webpack_require__(/*! ./_cloneArrayBuffer */ "./node_modules/lodash/_cloneArrayBuffer.js");
-
-/**
- * Creates a clone of `dataView`.
- *
- * @private
- * @param {Object} dataView The data view to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the cloned data view.
- */
-function cloneDataView(dataView, isDeep) {
-  var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
-  return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
-}
-
-module.exports = cloneDataView;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_cloneRegExp.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_cloneRegExp.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/** Used to match `RegExp` flags from their coerced string values. */
-var reFlags = /\w*$/;
-
-/**
- * Creates a clone of `regexp`.
- *
- * @private
- * @param {Object} regexp The regexp to clone.
- * @returns {Object} Returns the cloned regexp.
- */
-function cloneRegExp(regexp) {
-  var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
-  result.lastIndex = regexp.lastIndex;
-  return result;
-}
-
-module.exports = cloneRegExp;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_cloneSymbol.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_cloneSymbol.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js");
-
-/** Used to convert symbols to primitives and strings. */
-var symbolProto = Symbol ? Symbol.prototype : undefined,
-    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
-
-/**
- * Creates a clone of the `symbol` object.
- *
- * @private
- * @param {Object} symbol The symbol object to clone.
- * @returns {Object} Returns the cloned symbol object.
- */
-function cloneSymbol(symbol) {
-  return symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
-}
-
-module.exports = cloneSymbol;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/_cloneTypedArray.js":
 /*!*************************************************!*\
   !*** ./node_modules/lodash/_cloneTypedArray.js ***!
@@ -24975,60 +24720,6 @@ function copyObject(source, props, object, customizer) {
 }
 
 module.exports = copyObject;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_copySymbols.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_copySymbols.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var copyObject = __webpack_require__(/*! ./_copyObject */ "./node_modules/lodash/_copyObject.js"),
-    getSymbols = __webpack_require__(/*! ./_getSymbols */ "./node_modules/lodash/_getSymbols.js");
-
-/**
- * Copies own symbols of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy symbols from.
- * @param {Object} [object={}] The object to copy symbols to.
- * @returns {Object} Returns `object`.
- */
-function copySymbols(source, object) {
-  return copyObject(source, getSymbols(source), object);
-}
-
-module.exports = copySymbols;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_copySymbolsIn.js":
-/*!***********************************************!*\
-  !*** ./node_modules/lodash/_copySymbolsIn.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var copyObject = __webpack_require__(/*! ./_copyObject */ "./node_modules/lodash/_copyObject.js"),
-    getSymbolsIn = __webpack_require__(/*! ./_getSymbolsIn */ "./node_modules/lodash/_getSymbolsIn.js");
-
-/**
- * Copies own and inherited symbols of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy symbols from.
- * @param {Object} [object={}] The object to copy symbols to.
- * @returns {Object} Returns `object`.
- */
-function copySymbolsIn(source, object) {
-  return copyObject(source, getSymbolsIn(source), object);
-}
-
-module.exports = copySymbolsIn;
 
 
 /***/ }),
@@ -26060,34 +25751,6 @@ module.exports = getAllKeys;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/_getAllKeysIn.js":
-/*!**********************************************!*\
-  !*** ./node_modules/lodash/_getAllKeysIn.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetAllKeys = __webpack_require__(/*! ./_baseGetAllKeys */ "./node_modules/lodash/_baseGetAllKeys.js"),
-    getSymbolsIn = __webpack_require__(/*! ./_getSymbolsIn */ "./node_modules/lodash/_getSymbolsIn.js"),
-    keysIn = __webpack_require__(/*! ./keysIn */ "./node_modules/lodash/keysIn.js");
-
-/**
- * Creates an array of own and inherited enumerable property names and
- * symbols of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names and symbols.
- */
-function getAllKeysIn(object) {
-  return baseGetAllKeys(object, keysIn, getSymbolsIn);
-}
-
-module.exports = getAllKeysIn;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/_getData.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/_getData.js ***!
@@ -26348,42 +26011,6 @@ var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
 };
 
 module.exports = getSymbols;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_getSymbolsIn.js":
-/*!**********************************************!*\
-  !*** ./node_modules/lodash/_getSymbolsIn.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayPush = __webpack_require__(/*! ./_arrayPush */ "./node_modules/lodash/_arrayPush.js"),
-    getPrototype = __webpack_require__(/*! ./_getPrototype */ "./node_modules/lodash/_getPrototype.js"),
-    getSymbols = __webpack_require__(/*! ./_getSymbols */ "./node_modules/lodash/_getSymbols.js"),
-    stubArray = __webpack_require__(/*! ./stubArray */ "./node_modules/lodash/stubArray.js");
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeGetSymbols = Object.getOwnPropertySymbols;
-
-/**
- * Creates an array of the own and inherited enumerable symbols of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of symbols.
- */
-var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
-  var result = [];
-  while (object) {
-    arrayPush(result, getSymbols(object));
-    object = getPrototype(object);
-  }
-  return result;
-};
-
-module.exports = getSymbolsIn;
 
 
 /***/ }),
@@ -26718,131 +26345,6 @@ function hashSet(key, value) {
 }
 
 module.exports = hashSet;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_initCloneArray.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_initCloneArray.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Initializes an array clone.
- *
- * @private
- * @param {Array} array The array to clone.
- * @returns {Array} Returns the initialized clone.
- */
-function initCloneArray(array) {
-  var length = array.length,
-      result = new array.constructor(length);
-
-  // Add properties assigned by `RegExp#exec`.
-  if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
-    result.index = array.index;
-    result.input = array.input;
-  }
-  return result;
-}
-
-module.exports = initCloneArray;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_initCloneByTag.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_initCloneByTag.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var cloneArrayBuffer = __webpack_require__(/*! ./_cloneArrayBuffer */ "./node_modules/lodash/_cloneArrayBuffer.js"),
-    cloneDataView = __webpack_require__(/*! ./_cloneDataView */ "./node_modules/lodash/_cloneDataView.js"),
-    cloneRegExp = __webpack_require__(/*! ./_cloneRegExp */ "./node_modules/lodash/_cloneRegExp.js"),
-    cloneSymbol = __webpack_require__(/*! ./_cloneSymbol */ "./node_modules/lodash/_cloneSymbol.js"),
-    cloneTypedArray = __webpack_require__(/*! ./_cloneTypedArray */ "./node_modules/lodash/_cloneTypedArray.js");
-
-/** `Object#toString` result references. */
-var boolTag = '[object Boolean]',
-    dateTag = '[object Date]',
-    mapTag = '[object Map]',
-    numberTag = '[object Number]',
-    regexpTag = '[object RegExp]',
-    setTag = '[object Set]',
-    stringTag = '[object String]',
-    symbolTag = '[object Symbol]';
-
-var arrayBufferTag = '[object ArrayBuffer]',
-    dataViewTag = '[object DataView]',
-    float32Tag = '[object Float32Array]',
-    float64Tag = '[object Float64Array]',
-    int8Tag = '[object Int8Array]',
-    int16Tag = '[object Int16Array]',
-    int32Tag = '[object Int32Array]',
-    uint8Tag = '[object Uint8Array]',
-    uint8ClampedTag = '[object Uint8ClampedArray]',
-    uint16Tag = '[object Uint16Array]',
-    uint32Tag = '[object Uint32Array]';
-
-/**
- * Initializes an object clone based on its `toStringTag`.
- *
- * **Note:** This function only supports cloning values with tags of
- * `Boolean`, `Date`, `Error`, `Map`, `Number`, `RegExp`, `Set`, or `String`.
- *
- * @private
- * @param {Object} object The object to clone.
- * @param {string} tag The `toStringTag` of the object to clone.
- * @param {boolean} [isDeep] Specify a deep clone.
- * @returns {Object} Returns the initialized clone.
- */
-function initCloneByTag(object, tag, isDeep) {
-  var Ctor = object.constructor;
-  switch (tag) {
-    case arrayBufferTag:
-      return cloneArrayBuffer(object);
-
-    case boolTag:
-    case dateTag:
-      return new Ctor(+object);
-
-    case dataViewTag:
-      return cloneDataView(object, isDeep);
-
-    case float32Tag: case float64Tag:
-    case int8Tag: case int16Tag: case int32Tag:
-    case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
-      return cloneTypedArray(object, isDeep);
-
-    case mapTag:
-      return new Ctor;
-
-    case numberTag:
-    case stringTag:
-      return new Ctor(object);
-
-    case regexpTag:
-      return cloneRegExp(object);
-
-    case setTag:
-      return new Ctor;
-
-    case symbolTag:
-      return cloneSymbol(object);
-  }
-}
-
-module.exports = initCloneByTag;
 
 
 /***/ }),
@@ -28637,46 +28139,6 @@ module.exports = wrapperClone;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/cloneDeep.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/cloneDeep.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseClone = __webpack_require__(/*! ./_baseClone */ "./node_modules/lodash/_baseClone.js");
-
-/** Used to compose bitmasks for cloning. */
-var CLONE_DEEP_FLAG = 1,
-    CLONE_SYMBOLS_FLAG = 4;
-
-/**
- * This method is like `_.clone` except that it recursively clones `value`.
- *
- * @static
- * @memberOf _
- * @since 1.0.0
- * @category Lang
- * @param {*} value The value to recursively clone.
- * @returns {*} Returns the deep cloned value.
- * @see _.clone
- * @example
- *
- * var objects = [{ 'a': 1 }, { 'b': 2 }];
- *
- * var deep = _.cloneDeep(objects);
- * console.log(deep[0] === objects[0]);
- * // => false
- */
-function cloneDeep(value) {
-  return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
-}
-
-module.exports = cloneDeep;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/constant.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/constant.js ***!
@@ -29278,44 +28740,6 @@ module.exports = isLength;
 
 /***/ }),
 
-/***/ "./node_modules/lodash/isMap.js":
-/*!**************************************!*\
-  !*** ./node_modules/lodash/isMap.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseIsMap = __webpack_require__(/*! ./_baseIsMap */ "./node_modules/lodash/_baseIsMap.js"),
-    baseUnary = __webpack_require__(/*! ./_baseUnary */ "./node_modules/lodash/_baseUnary.js"),
-    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ "./node_modules/lodash/_nodeUtil.js");
-
-/* Node.js helper references. */
-var nodeIsMap = nodeUtil && nodeUtil.isMap;
-
-/**
- * Checks if `value` is classified as a `Map` object.
- *
- * @static
- * @memberOf _
- * @since 4.3.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a map, else `false`.
- * @example
- *
- * _.isMap(new Map);
- * // => true
- *
- * _.isMap(new WeakMap);
- * // => false
- */
-var isMap = nodeIsMap ? baseUnary(nodeIsMap) : baseIsMap;
-
-module.exports = isMap;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/isNumber.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/isNumber.js ***!
@@ -29516,44 +28940,6 @@ function isPlainObject(value) {
 }
 
 module.exports = isPlainObject;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isSet.js":
-/*!**************************************!*\
-  !*** ./node_modules/lodash/isSet.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseIsSet = __webpack_require__(/*! ./_baseIsSet */ "./node_modules/lodash/_baseIsSet.js"),
-    baseUnary = __webpack_require__(/*! ./_baseUnary */ "./node_modules/lodash/_baseUnary.js"),
-    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ "./node_modules/lodash/_nodeUtil.js");
-
-/* Node.js helper references. */
-var nodeIsSet = nodeUtil && nodeUtil.isSet;
-
-/**
- * Checks if `value` is classified as a `Set` object.
- *
- * @static
- * @memberOf _
- * @since 4.3.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a set, else `false`.
- * @example
- *
- * _.isSet(new Set);
- * // => true
- *
- * _.isSet(new WeakSet);
- * // => false
- */
-var isSet = nodeIsSet ? baseUnary(nodeIsSet) : baseIsSet;
-
-module.exports = isSet;
 
 
 /***/ }),
@@ -34596,17 +33982,6 @@ module.exports.polyfill = function(object) {
 
 /***/ }),
 
-/***/ "./node_modules/react-dom/index.js":
-/*!***********************************************************************************************!*\
-  !*** delegated ./node_modules/react-dom/index.js from dll-reference dll_52339ab353c8e0db40da ***!
-  \***********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = (__webpack_require__(/*! dll-reference dll_52339ab353c8e0db40da */ "dll-reference dll_52339ab353c8e0db40da"))("./node_modules/react-dom/index.js");
-
-/***/ }),
-
 /***/ "./node_modules/react-measure/lib/Measure.js":
 /*!***************************************************!*\
   !*** ./node_modules/react-measure/lib/Measure.js ***!
@@ -36818,6 +36193,33 @@ exports.default = shouldUpdate;
 
 /***/ }),
 
+/***/ "./node_modules/recompose/utils/mapValues.js":
+/*!***************************************************!*\
+  !*** ./node_modules/recompose/utils/mapValues.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+var mapValues = function mapValues(obj, func) {
+  var result = {};
+  /* eslint-disable no-restricted-syntax */
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = func(obj[key], key);
+    }
+  }
+  /* eslint-enable no-restricted-syntax */
+  return result;
+};
+
+exports.default = mapValues;
+
+/***/ }),
+
 /***/ "./node_modules/recompose/utils/pick.js":
 /*!**********************************************!*\
   !*** ./node_modules/recompose/utils/pick.js ***!
@@ -36971,6 +36373,114 @@ var withPropsOnChange = function withPropsOnChange(shouldMapOrKeys, propsMapper)
 };
 
 exports.default = withPropsOnChange;
+
+/***/ }),
+
+/***/ "./node_modules/recompose/withStateHandlers.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/recompose/withStateHandlers.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _setDisplayName = __webpack_require__(/*! ./setDisplayName */ "./node_modules/recompose/setDisplayName.js");
+
+var _setDisplayName2 = _interopRequireDefault(_setDisplayName);
+
+var _wrapDisplayName = __webpack_require__(/*! ./wrapDisplayName */ "./node_modules/recompose/wrapDisplayName.js");
+
+var _wrapDisplayName2 = _interopRequireDefault(_wrapDisplayName);
+
+var _shallowEqual = __webpack_require__(/*! ./shallowEqual */ "./node_modules/recompose/shallowEqual.js");
+
+var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+
+var _mapValues = __webpack_require__(/*! ./utils/mapValues */ "./node_modules/recompose/utils/mapValues.js");
+
+var _mapValues2 = _interopRequireDefault(_mapValues);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var withStateHandlers = function withStateHandlers(initialState, stateUpdaters) {
+  return function (BaseComponent) {
+    var factory = (0, _react.createFactory)(BaseComponent);
+
+    var WithStateHandlers = function (_Component) {
+      _inherits(WithStateHandlers, _Component);
+
+      function WithStateHandlers() {
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, WithStateHandlers);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
+      }
+
+      WithStateHandlers.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps, nextState) {
+        var propsChanged = nextProps !== this.props;
+        // the idea is to skip render if stateUpdater handler return undefined
+        // this allows to create no state update handlers with access to state and props
+        var stateChanged = !(0, _shallowEqual2.default)(nextState, this.state);
+        return propsChanged || stateChanged;
+      };
+
+      WithStateHandlers.prototype.render = function render() {
+        return factory(_extends({}, this.props, this.state, this.stateUpdaters));
+      };
+
+      return WithStateHandlers;
+    }(_react.Component);
+
+    var _initialiseProps = function _initialiseProps() {
+      var _this2 = this;
+
+      this.state = typeof initialState === 'function' ? initialState(this.props) : initialState;
+      this.stateUpdaters = (0, _mapValues2.default)(stateUpdaters, function (handler) {
+        return function (mayBeEvent) {
+          for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+            args[_key2 - 1] = arguments[_key2];
+          }
+
+          // Having that functional form of setState can be called async
+          // we need to persist SyntheticEvent
+          if (mayBeEvent && typeof mayBeEvent.persist === 'function') {
+            mayBeEvent.persist();
+          }
+
+          _this2.setState(function (state, props) {
+            return handler(state, props).apply(undefined, [mayBeEvent].concat(args));
+          });
+        };
+      });
+    };
+
+    if (true) {
+      return (0, _setDisplayName2.default)((0, _wrapDisplayName2.default)(BaseComponent, 'withStateHandlers'))(WithStateHandlers);
+    }
+    return WithStateHandlers;
+  };
+};
+
+exports.default = withStateHandlers;
 
 /***/ }),
 
@@ -39689,9 +39199,9 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./pages/treemap.js":
+/***/ "./pages/bubbles.js":
 /*!**************************!*\
-  !*** ./pages/treemap.js ***!
+  !*** ./pages/bubbles.js ***!
   \**************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -39701,16 +39211,28 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(module) {/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_MyLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/MyLayout */ "./components/MyLayout.js");
-/* harmony import */ var _components_TreeMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/TreeMap */ "./components/TreeMap.js");
+/* harmony import */ var _components_prodSmallBubbles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/prodSmallBubbles */ "./components/prodSmallBubbles.js");
+/* harmony import */ var _components_prodLargeBubbles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/prodLargeBubbles */ "./components/prodLargeBubbles.js");
+/* harmony import */ var _components_ecosystemeBubble__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/ecosystemeBubble */ "./components/ecosystemeBubble.js");
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_MyLayout__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "TreeMap"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Type de structure"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_MyLayout__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Bulles"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: {
+      height: '600px'
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Nombre de productions "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_prodSmallBubbles__WEBPACK_IMPORTED_MODULE_2__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " Remarques : "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Les cercles ne sont pas parfaits"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Ils sont contenus dans une \"bulles\" plus grandes et ne peuvent pas \xEAtre horizontalis\xE9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Pas sur de pouvoir mettre la l\xE9gende bien comme il faut")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     style: {
       height: '500px'
     }
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_TreeMap__WEBPACK_IMPORTED_MODULE_2__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Remarques :"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Normalement \xE7a devrait \xEAtre possible de personnaliser les labels"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Dans la maquette, la dimension de profondeur propre \xE0 la repr\xE9sentation sous forme de treemap n'est pas vraiment justifi\xE9e donc il y a un seul niveau de profondeur actuellement."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Pas possible d'arrondir les angles ")));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Nombre total de productions "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_prodLargeBubbles__WEBPACK_IMPORTED_MODULE_3__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " Remarques : "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Je ne sais pas comment augmenter la taille des labels")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: {
+      height: '500px'
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Ecosyst\xE8me"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_ecosystemeBubble__WEBPACK_IMPORTED_MODULE_4__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " Remarques : "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Le diam\xE8tre des bulles ne signifie rien ici => quelle est sa signification sur la maquette ?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Le couleur des bulles est ici plus ou moins al\xE9atoire (quand on a un multiple de 3) pour un effet visuel mais on peut mettre n'importe quelle fonction pour d\xE9terminer la couleur")));
 });
     (function (Component, route) {
       if(!Component) return
@@ -39728,21 +39250,21 @@ __webpack_require__.r(__webpack_exports__);
           next.router.update(r, Component)
         }
       }
-    })(typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__.default : (module.exports.default || module.exports), "/treemap")
+    })(typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__.default : (module.exports.default || module.exports), "/bubbles")
   
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /*!********************************!*\
-  !*** multi ./pages/treemap.js ***!
+  !*** multi ./pages/bubbles.js ***!
   \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__NEXT_REGISTER_PAGE('/treemap', function() {
-module.exports = __webpack_require__(/*! ./pages/treemap.js */"./pages/treemap.js");
+__NEXT_REGISTER_PAGE('/bubbles', function() {
+module.exports = __webpack_require__(/*! ./pages/bubbles.js */"./pages/bubbles.js");
 
 return { page: module.exports.default }});
 
@@ -39759,5 +39281,5 @@ module.exports = dll_52339ab353c8e0db40da;
 
 /***/ })
 
-},[[4,"static/runtime/webpack.js"]]]));;
-//# sourceMappingURL=treemap.js.map
+},[[5,"static/runtime/webpack.js"]]]));;
+//# sourceMappingURL=bubbles.js.map
